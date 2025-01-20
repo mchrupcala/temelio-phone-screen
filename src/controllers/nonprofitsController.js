@@ -11,7 +11,7 @@ exports.createNonprofit = (req, res) => {
   const newNonprofit = { name, email, address };
   allNonprofits.set(email, newNonprofit);
 
-  return res.status(200).json({ newNonprofit });
+  return res.status(200).json({ ...newNonprofit });
 };
 
 exports.getNonprofits = (req, res) => {
