@@ -1,4 +1,5 @@
 const express = require("express");
+const { v4: uuidv4 } = require("uuid");
 
 const app = express();
 app.use(express.json());
@@ -41,32 +42,41 @@ app.get("/emails", (req, res) => {
 });
 
 app.post("/emails", (req, res) => {
-  const { name, address, to, from, subject, body } = req.body;
-  const receiver = allNonprofits.get(to);
+  const { nonProfitEmails, template, sender, subject } = req.body;
+  const sentEmails = [];
 
-  if (!name || !address || !to || !from || !subject || !body) {
+  if (!sender || !subject) {
     return res.status(400).json({
       message:
-        "Missing data, please try again. Please include name, address, to, from, subject, and body fields.",
+        "Missing data, please try again. Please include sender, subject, and body fields.",
     });
   }
 
-  if (!receiver) {
-    return res.status(404).json({ message: "Nobody found at that email" });
-  }
+  nonProfitEmails.forEach((email) => {
+    const nonprofit = allNonprofits.get(email);
+    if (!nonprofit) return;
 
-  const newEmail = {
-    name: name,
-    address: address,
-    to: to,
-    from: from,
-    subject: subject,
-    body: body,
-  };
+    const body = template
+      .replace("{ name }", nonprofit.name)
+      .replace("{ address }", nonprofit.address);
+    const emailItem = {
+      id: uuidv4(),
+      body: body,
+      from: sender,
+      to: nonprofit.email,
+      subject: subject,
+    };
+    allSentEmails.push(emailItem);
+    sentEmails.push(emailItem);
+  });
 
-  allSentEmails.push(newEmail);
-
-  return res.status(200).json(newEmail);
+  res
+    .status(200)
+    .json({
+      message: "Emails sent successfully",
+      count: sentEmails.length,
+      sentEmails,
+    });
 });
 
 app.listen(3000, () => {
