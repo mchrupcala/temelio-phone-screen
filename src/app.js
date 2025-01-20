@@ -1,5 +1,4 @@
 const express = require("express");
-// const dotenv = require('dotenv');
 
 const app = express();
 app.use(express.json());
@@ -9,6 +8,18 @@ const allSentEmails = [];
 
 app.get("/nonprofits", (req, res) => {
   return res.status(200).json(Array.from(allNonprofits.values()));
+});
+
+app.get("/nonprofits/:email", (req, res) => {
+  const email = req.params.email;
+
+  if (!allNonprofits.has(email)) {
+    return res
+      .status(404)
+      .json({ message: `No nonprofit with email ${email} was found.` });
+  }
+
+  return res.status(200).json(allNonprofits.get(email));
 });
 
 app.post("/nonprofits", (req, res) => {
