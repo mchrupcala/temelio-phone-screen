@@ -1,0 +1,35 @@
+//draft emails
+
+// status: draft, sent
+
+
+// bulk template --> many emails (some sent, some rejected)
+
+// new table bulkTemplate
+
+[
+    {
+        "id": "9c91a8e1-cd01-4449-8aba-3c5894d33a4f",
+        "body": "Red Cross I'm testing at @ { address }.",
+        "subject": "Test",
+        "from": "huh@meck.com",
+        "to": ["ok@gmail.com", "test@gmail.com"],
+        "successful": ["ok@gmail.com"],
+        "failed": ["test@gmail.com"],
+        "cc": "boss@gmail.com",
+        "bcc": "legal@gmail.com",
+        "status": SENT
+    },
+    {
+        "id": "9c91a8e1-cd01-4449-8aba-3c5894d33a4f",
+        "body": "Blue Shield I'm testing at @ { address }.",
+        "subject": "Test",
+        "from": "huh@meck.com",
+        "to": ["ok@gmail.com", "test@gmail.com"],
+        "successful": ["ok@gmail.com"],
+        "failed": ["test@gmail.com"],
+        "cc": "boss@gmail.com",
+        "bcc": "legal@gmail.com",
+        "status": SENT
+    }
+]

@@ -2,12 +2,16 @@ const { allSentEmails, allNonprofits } = require("../data/database");
 const { v4: uuidv4 } = require("uuid");
 const emailService = require("../services/emailService.js");
 
+// added CC and BCC.
+// both are optional fields.
+// When we look at sent emails, we want to see the fields included in sent emails.
+
 exports.getSentEmails = (req, res) => {
   return res.status(200).json(allSentEmails);
 };
 
 exports.sendBulkEmails = (req, res) => {
-  const { nonProfitEmails, template, sender, subject } = req.body;
+  const { nonProfitEmails, template, sender, subject, cc, bcc } = req.body;
   const sentEmails = [];
 
   if (!sender || !subject || !nonProfitEmails || !template) {
@@ -37,6 +41,8 @@ exports.sendBulkEmails = (req, res) => {
       subject: subject,
       from: sender,
       to: nonprofit.email,
+      cc: cc,
+      bcc: bcc,
     };
 
     emailService.sendEmail(email, emailItem);
